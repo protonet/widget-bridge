@@ -10,11 +10,11 @@ class LiveUser
   include DataMapper::Resource  
   property :id,           Serial
   property :login,        String
+  property :password,     String
   property :user_id,      Integer, :key => false
   property :channel_id,   Integer, :key => false
   property :communication_token,  String
-  property :password,     String
-  property :created_at,   DateTime
+  property :created_at,   Date
 end
 
 configure do
@@ -57,11 +57,23 @@ def fetch_api(path, options = nil)
   end
 end
 
+get '/update/:id' do
+  @user = LiveUser.first(:user_id => params[:id])
+  @user.update(:created_at, Time.now)
+  JSONP [{ 
+    :user_id => @user.user_id, 
+    :channel_id => @user.channel_id, 
+    :communication_token => @user.communication_token,
+    :created_at => @user.created_at
+  }]
+end
+
 get '/start' do
     
   @user = LiveUser.create(
     :login => "live-user#{LiveUser.count}",
-    :password => rand(36**8).to_s(36)
+    :password => rand(36**8).to_s(36),
+    :created_at => Date.today
   )
   
   # create user
@@ -104,7 +116,18 @@ get '/start' do
   JSONP [{ 
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
-    :communication_token => @user.communication_token
+    :communication_token => @user.communication_token,
+    :created_at => @user.created_at
   }]
   
+end
+
+get '/cleanup' do
+  @users = LiveUser.all(:created_at.lt => Date.today - 7)
+  @users.each do |user|
+    fetch_api("/api/v1/channels/#{user.channel_id}", {'_method' => :delete })
+    fetch_api("/api/v1/user/#{user.user_id}", {'_method' => :delete })
+    user.destroy
+  end
+  JSONP "OK"
 end
