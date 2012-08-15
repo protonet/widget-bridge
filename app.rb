@@ -102,11 +102,9 @@ get '/start' do
   # create a user + channel
   # return json with user_credentials + channel_id + SocketUrl
   JSONP [{ 
-    :login => @user.login,
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
-    :communication_token => @user.communication_token, 
-    :password => @user.password
+    :communication_token => @user.communication_token
   }]
   
 end
