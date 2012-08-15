@@ -25,7 +25,7 @@ configure do
   set :api_url, (ENV['API_URL'] || "http://localhost:3000")
   set :api_user, (ENV['API_USER'] || "admin")
   set :api_pw, (ENV['API_PW'] || "admin")
-  set :admin_ids, (ENV['ADMIN_USERS'] || [1])
+  set :admin_ids, (ENV['ADMIN_USERS'].split(",") || [1])
   
   enable :logging, :dump_errors, :raise_errors
 end
