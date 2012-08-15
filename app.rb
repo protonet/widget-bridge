@@ -25,8 +25,12 @@ configure do
   set :api_url, (ENV['API_URL'] || "http://localhost:3000")
   set :api_user, (ENV['API_USER'] || "admin")
   set :api_pw, (ENV['API_PW'] || "admin")
-  set :admin_ids, (ENV['ADMIN_USERS'].split(",") || [1])
-  
+  if ENV['ADMIN_USERS']
+    set :admin_ids, ENV['ADMIN_USERS'].split(",") 
+  else
+    set :admin_ids, [1]
+  end
+
   enable :logging, :dump_errors, :raise_errors
 end
 
@@ -61,7 +65,6 @@ get '/update/:id' do
   @user = LiveUser.first(:user_id => params[:id].to_i)
   @user.created_at = Date.today
   @user.save
-  #@user.update(:created_at, Date.today)
   JSONP [{ 
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
