@@ -69,6 +69,7 @@ GEM
     sinatra-jsonp (0.3.2)
       json_pure (~> 1.4)
       sinatra (~> 1.0)
+    sqlite3 (1.3.6)
     stringex (1.4.0)
     thin (1.4.1)
       daemons (>= 1.0.9)
@@ -86,4 +87,5 @@ DEPENDENCIES
   shotgun
   sinatra
   sinatra-jsonp
+  sqlite3
   thin
