@@ -10,3 +10,7 @@ group :development, :test do
   gem 'dm-sqlite-adapter'
   gem 'sqlite3'
 end
+
+group :production do
+  gem 'dm-postgres-adapter'
+end
