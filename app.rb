@@ -59,7 +59,7 @@ end
 
 get '/update/:id' do
   @user = LiveUser.first(:user_id => params[:id])
-  @user.update(:created_at, Time.now)
+  @user.update(:created_at, Date.today)
   JSONP [{ 
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
