@@ -1,6 +1,5 @@
 require 'sinatra'
-require 'dm-core'
-require 'dm-migrations/adapters/dm-sqlite-adapter'
+require 'data_mapper'
 require 'net/http'
 require 'net/https'
 require 'uri'
