@@ -91,7 +91,6 @@ DEPENDENCIES
   data_mapper
   dm-postgres-adapter
   dm-sqlite-adapter
-  do_postgres
   pg
   shotgun
   sinatra

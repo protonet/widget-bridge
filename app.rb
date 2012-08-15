@@ -22,10 +22,10 @@ configure do
   DataMapper.setup(:default, (ENV["DATABASE_URL"] || "sqlite3:///#{Dir.pwd}/development.sqlite3"))
   DataMapper.auto_upgrade!
   
-  set :api_url, (ENV['API_URL'] || "http://10.44.85.85:3000")
+  set :api_url, (ENV['API_URL'] || "http://localhost:3000")
   set :api_user, (ENV['API_USER'] || "admin")
   set :api_pw, (ENV['API_PW'] || "admin")
-  set :admin_ids, [1,4]
+  set :admin_ids, (ENV['ADMIN_USERS'] || [1])
   
   enable :logging, :dump_errors, :raise_errors
 end
