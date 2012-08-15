@@ -58,8 +58,10 @@ def fetch_api(path, options = nil)
 end
 
 get '/update/:id' do
-  @user = LiveUser.first(:user_id => params[:id])
-  @user.update(:created_at, Date.today)
+  @user = LiveUser.first(:user_id => params[:id].to_i)
+  @user.created_at = Date.today
+  @user.save
+  #@user.update(:created_at, Date.today)
   JSONP [{ 
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
