@@ -20,11 +20,16 @@ HEROKU:
 CONFIG:
 -------
 Set the API_URL to your protonet webpublishing url.
+
     heroku config:add API_URL="http://yournode.protonet.info"
+
 You need a protonet user with admin rights to be able to speak with the api.
+
     heroku config:add API_USER="apilogin"
     heroku config:add API_PW="superspecialpassword"
+
 Get the IDs of users who should be in the LiveChat 
+
     heroku config:add ADMIN_USERS="1,2,3"
 
 
