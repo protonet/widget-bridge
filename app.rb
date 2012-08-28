@@ -14,6 +14,7 @@ class LiveUser
   property :user_id,      Integer, :key => false
   property :channel_id,   Integer, :key => false
   property :communication_token,  String
+  property :communication_token_expires_at, Date
   property :created_at,   Date
 end
 
@@ -63,12 +64,17 @@ end
 
 get '/update/:id' do
   @user = LiveUser.first(:user_id => params[:id].to_i)
-  @user.created_at = Date.today
-  @user.save
+  user = fetch_api("/api/v1/users/#{@user.user_id}")
+  @user.update(
+    :communication_token => user["communication_token"],
+    :communication_token_expires_at => user["communication_token_expires_at"],
+    :created_at => Date.today
+  )
   JSONP [{ 
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
     :communication_token => @user.communication_token,
+    :communication_token_expires_at => @user.communication_token_expires_at,
     :created_at => @user.created_at
   }]
 end
@@ -88,6 +94,7 @@ get '/start' do
     :email => "#{@user.login}@example.com",
     :no_channels => true
   })
+
   if user
     @user.update(:user_id => user["user_id"])
   else
@@ -96,10 +103,14 @@ get '/start' do
   
   # get communication_token
   user = fetch_api("/api/v1/users/#{@user.user_id}")
+
   if user
-    @user.update(:communication_token => user["communication_token"])
+    @user.update(
+      :communication_token => user["communication_token"],
+      :communication_token_expires_at => user["communication_token_expires_at"]
+    )
   else
-    return "could not create a user"
+    return "could not fetch a user"
   end
   
   # create channel
@@ -107,7 +118,7 @@ get '/start' do
   if channel
     @user.update(:channel_id => channel["channel_id"])
   else
-    return "could not create a user"
+    return "could not create a channel"
   end
 
   # create listen
@@ -122,7 +133,8 @@ get '/start' do
     :user_id => @user.user_id, 
     :channel_id => @user.channel_id, 
     :communication_token => @user.communication_token,
-    :created_at => @user.created_at
+    :created_at => @user.created_at,
+    :communication_token_expires_at => @user.communication_token_expires_at
   }]
   
 end
